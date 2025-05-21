@@ -28,10 +28,10 @@ export class UnassignGroupsToUserUsecase {
           const response = await connection.delete(
             '/admin/realms/' +
               KeycloakConstants.REALM +
-              '/groups/' +
-              group +
               '/users/' +
-              data.id,
+              data.id +
+              '/groups/' +
+              group,
             {
               headers: {
                 Authorization: 'Bearer ' + auth.data.access_token,

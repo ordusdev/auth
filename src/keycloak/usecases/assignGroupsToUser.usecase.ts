@@ -28,10 +28,10 @@ export class AssignGroupsToUserUsecase {
           const response = await connection.put(
             '/admin/realms/' +
               KeycloakConstants.REALM +
-              '/groups/' +
-              group +
               '/users/' +
-              data.id,
+              data.id +
+              '/groups/' +
+              group,
             {},
             {
               headers: {
