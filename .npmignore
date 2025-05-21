@@ -1,0 +1,8 @@
+src
+libs
+node_modules
+dist/**/*.map
+*.log
+Dockerfile
+docker-compose.yml
+.env
