@@ -12,6 +12,19 @@ export class UnassignGroupsToUserUsecase {
 
       const response = await Promise.all(
         data.groups.map(async group => {
+          const groupExists = await connection.get(
+            '/admin/realms/' + KeycloakConstants.REALM + '/groups/' + group,
+            {
+              headers: {
+                Authorization: 'Bearer ' + auth.data.access_token,
+                'Content-Type': 'application/json',
+              },
+            },
+          )
+
+          if (groupExists.data.length === 0) {
+            throw new Error(`Group #${group} does not exist`)
+          }
           const response = await connection.delete(
             '/admin/realms/' +
               KeycloakConstants.REALM +
