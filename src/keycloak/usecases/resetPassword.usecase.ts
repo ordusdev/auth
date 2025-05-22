@@ -11,15 +11,15 @@ export class ResetPasswordUsecase {
       console.log('Reset Password KC ••• ')
 
       const response = await connection.put(
-        '/admin/realms/' + KeycloakConstants.REALM + '/users' + data.id,
+        '/admin/realms/' +
+          KeycloakConstants.REALM +
+          '/users' +
+          data.id +
+          '/reset-password',
         {
-          credentials: [
-            {
-              type: 'password',
-              value: data.password,
-              temporary: data.isTemporary,
-            },
-          ],
+          type: 'password',
+          value: data.password,
+          temporary: data.isTemporary,
         },
         {
           headers: {
@@ -39,7 +39,6 @@ export class ResetPasswordUsecase {
           },
           Object.keys(error.response),
           error.response.data,
-          error.request?.data,
         )
       } else {
         console.error('Unknown error in ResetPasswordUsecase', error)

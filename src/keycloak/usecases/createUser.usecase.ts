@@ -45,7 +45,6 @@ export class CreateUserUsecase {
           },
           Object.keys(error.response),
           error.response.data,
-          error.request?.data,
         )
       } else {
         console.error('Unknown error in CreateUserUsecase', error)

@@ -28,7 +28,6 @@ export class GetGroupsUsecase {
           },
           Object.keys(error.response),
           error.response.data,
-          error.request?.data,
         )
       } else {
         console.error('Unknown error in GetGroupsUsecase', error)

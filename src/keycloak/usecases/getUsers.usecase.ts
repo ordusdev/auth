@@ -71,7 +71,6 @@ export class GetUsersUsecase {
           },
           Object.keys(error.response),
           error.response.data,
-          error.request?.data,
         )
       } else {
         console.error('Unknown error in GetUsersUsecase', error)

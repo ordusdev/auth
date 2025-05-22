@@ -54,7 +54,6 @@ export class UnassignGroupsToUserUsecase {
           },
           Object.keys(error.response),
           error.response.data,
-          error.request?.data,
         )
       } else {
         console.error('Unknown error in UnassignGroupsToUserUsecase', error)
