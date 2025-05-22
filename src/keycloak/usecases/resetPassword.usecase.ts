@@ -8,7 +8,7 @@ export class ResetPasswordUsecase {
   async execute(data: ResetPasswordType) {
     try {
       const auth = await new AuthUsecase().execute()
-      console.log('Reset Password KC ••• ', auth.data.access_token)
+      console.log('Reset Password KC ••• ')
 
       const response = await connection.put(
         '/admin/realms/' + KeycloakConstants.REALM + '/users' + data.id,

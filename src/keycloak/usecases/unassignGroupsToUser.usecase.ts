@@ -8,7 +8,7 @@ export class UnassignGroupsToUserUsecase {
   async execute(data: UnassignGroupsToUserType) {
     try {
       const auth = await new AuthUsecase().execute()
-      console.log('Unassign Groups To User KC ••• ', auth.data.access_token)
+      console.log('Unassign Groups To User KC ••• ')
 
       const response = await Promise.all(
         data.groups.map(async group => {
@@ -42,17 +42,6 @@ export class UnassignGroupsToUserUsecase {
           console.log('UnassignGroupsToUser KC response ••• ', response.data)
           return response.data
         }),
-      )
-
-      await connection.put(
-        '/admin/realms/' + KeycloakConstants.REALM + '/users' + data.id,
-        {},
-        {
-          headers: {
-            Authorization: 'Bearer ' + auth.data.access_token,
-            'Content-Type': 'application/json',
-          },
-        },
       )
 
       return response

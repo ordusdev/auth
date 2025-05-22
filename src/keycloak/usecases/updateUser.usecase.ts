@@ -8,7 +8,7 @@ export class UpdateUserUsecase {
   async execute(data: UpdateUserType) {
     try {
       const auth = await new AuthUsecase().execute()
-      console.log('Update User KC ••• ', auth.data.access_token)
+      console.log('Update User KC ••• ')
 
       const response = await connection.put(
         '/admin/realms/' + KeycloakConstants.REALM + '/users' + data.id,

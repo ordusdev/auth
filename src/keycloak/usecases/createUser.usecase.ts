@@ -8,7 +8,7 @@ export class CreateUserUsecase {
   async execute(data: CreateUserType) {
     try {
       const auth = await new AuthUsecase().execute()
-      console.log('Create User KC ••• ', auth.data.access_token)
+      console.log('Create User KC ••• ')
 
       const password = data.password
       const isTemporaryPassword = data.isTemporaryPassword
