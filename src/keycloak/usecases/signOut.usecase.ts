@@ -8,11 +8,9 @@ export class SignOutUsecase {
   async execute(data: SignOutType) {
     try {
       const auth = await new AuthUsecase().execute()
-
-      const response = await connection.post(
-        '/realms/' +
-          KeycloakConstants.REALM +
-          '/protocol/openid-connect/logout',
+      const realm = data.realm ?? KeycloakConstants.REALM
+      const response = await connection.post<void>(
+        '/realms/' + realm + '/protocol/openid-connect/logout',
         {
           refresh_token: data.refresh_token,
         },

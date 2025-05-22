@@ -2,16 +2,15 @@ import axios from 'axios'
 import connection from '../connection'
 import { KeycloakConstants } from '../constants'
 import { AuthUsecase } from './admin/auth.usecase'
-import { GetUserByEmailType } from '../types'
-import { UserRepresentationType } from '../types/representations/user.representaion.type'
+import { DeleteUserType } from '../types/deleteUser.type'
 
-export class GetUserByEmailUsecase {
-  async execute(data: GetUserByEmailType) {
+export class DeleteUserUsecase {
+  async execute(data: DeleteUserType) {
     try {
       const auth = await new AuthUsecase().execute()
       const realm = data.realm ?? KeycloakConstants.REALM
-      const response = await connection.get<UserRepresentationType>(
-        '/admin/realms/' + realm + '/users?email=' + data.email,
+      const response = await connection.delete<void>(
+        '/admin/realms/' + realm + '/users/' + data.id,
         {
           headers: {
             Authorization: 'Bearer ' + auth.data.access_token,
@@ -26,13 +25,13 @@ export class GetUserByEmailUsecase {
         console.error(
           {
             status: error.response.status,
-            usecase: 'GetUserByEmailUsecase',
+            usecase: 'DeleteUserUsecase',
           },
           Object.keys(error.response),
           error.response.data,
         )
       } else {
-        console.error('Unknown error in GetUserByEmailUsecase', error)
+        console.error('Unknown error in DeleteUserUsecase', error)
       }
     }
   }

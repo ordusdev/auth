@@ -3,20 +3,23 @@ import connection from '../connection'
 import { KeycloakConstants } from '../constants/keycloak.constant'
 import { CreateUserType } from '../types/createUser.type'
 import { AuthUsecase } from './admin/auth.usecase'
+import { UserRepresentationType } from '../types/representations/user.representaion.type'
 
 export class CreateUserUsecase {
   async execute(data: CreateUserType) {
     try {
       const auth = await new AuthUsecase().execute()
-      console.log('Create User KC ••• ')
+      // console.log('Create User KC ••• ')
 
       const password = data.password
       const isTemporaryPassword = data.isTemporaryPassword
       delete (data as any).password
       delete data.isTemporaryPassword
 
-      const response = await connection.post(
-        '/admin/realms/' + KeycloakConstants.REALM + '/users',
+      const realm = data.realm ?? KeycloakConstants.REALM
+
+      const response = await connection.post<UserRepresentationType>(
+        '/admin/realms/' + realm + '/users',
         {
           ...data,
           credentials: [
@@ -34,8 +37,8 @@ export class CreateUserUsecase {
           },
         },
       )
-      console.log('CreateUser KC response ••• ', response.data)
-      return response
+      // console.log('CreateUser KC response ••• ', response.data)
+      return response.data
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.error(

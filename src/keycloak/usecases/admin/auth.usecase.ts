@@ -1,9 +1,10 @@
 import connection from '../../connection'
 import { KeycloakConstants } from '../../constants'
+import { AuthRepresentationType } from '../../types/representations/auth.representation.type'
 
 export class AuthUsecase {
   async execute() {
-    return connection.post(
+    const response = await connection.post<AuthRepresentationType>(
       '/realms/' + KeycloakConstants.REALM + '/protocol/openid-connect/token',
       new URLSearchParams({
         grant_type: 'client_credentials',
@@ -16,5 +17,9 @@ export class AuthUsecase {
         },
       },
     )
+
+    // console.log('Auth KC response ••• ', response.data)
+
+    return response
   }
 }

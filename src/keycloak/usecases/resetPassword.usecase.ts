@@ -3,19 +3,17 @@ import connection from '../connection'
 import { KeycloakConstants } from '../constants/keycloak.constant'
 import { ResetPasswordType } from '../types/resetPassword.type'
 import { AuthUsecase } from './admin/auth.usecase'
+import { AuthRepresentationType } from '../types/representations/auth.representation.type'
 
 export class ResetPasswordUsecase {
   async execute(data: ResetPasswordType) {
     try {
       const auth = await new AuthUsecase().execute()
-      console.log('Reset Password KC ••• ')
+      // console.log('Reset Password KC ••• ')
+      const realm = data.realm ?? KeycloakConstants.REALM
 
-      const response = await connection.put(
-        '/admin/realms/' +
-          KeycloakConstants.REALM +
-          '/users' +
-          data.id +
-          '/reset-password',
+      const response = await connection.put<AuthRepresentationType>(
+        '/admin/realms/' + realm + '/users' + data.id + '/reset-password',
         {
           type: 'password',
           value: data.password,
@@ -28,8 +26,8 @@ export class ResetPasswordUsecase {
           },
         },
       )
-      console.log('ResetPassword KC response ••• ', response.data)
-      return response
+      // console.log('ResetPassword KC response ••• ', response.data)
+      return response.data
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.error(

@@ -3,12 +3,15 @@ import connection from '../connection'
 import { KeycloakConstants } from '../constants'
 import { GetUsersType } from '../types/getUsers.type'
 import { AuthUsecase } from './admin/auth.usecase'
+import { UserRepresentationType } from '../types/representations/user.representaion.type'
+import { GroupRepresentationType } from '../types/representations/group.representation.type'
 
 export class GetUsersUsecase {
   async execute(data: GetUsersType) {
     try {
       const auth = await new AuthUsecase().execute()
       const params = []
+      const realm = data.realm ?? KeycloakConstants.REALM
 
       if (data.id) {
         params.push('id=' + data.id)
@@ -29,8 +32,8 @@ export class GetUsersUsecase {
         params.push('search=' + data.search)
       }
 
-      const users = await connection.get(
-        '/admin/realms/' + KeycloakConstants.REALM + '/users',
+      const users = await connection.get<UserRepresentationType[]>(
+        '/admin/realms/' + realm + '/users',
         {
           headers: {
             Authorization: 'Bearer ' + auth.data.access_token,
@@ -43,12 +46,8 @@ export class GetUsersUsecase {
       if (data.withGroups) {
         await Promise.all(
           users.data.map(async (user: any) => {
-            const groups = await connection.get(
-              '/admin/realms/' +
-                KeycloakConstants.REALM +
-                '/users/' +
-                user.id +
-                '/groups',
+            const groups = await connection.get<GroupRepresentationType[]>(
+              '/admin/realms/' + realm + '/users/' + user.id + '/groups',
               {
                 headers: {
                   Authorization: 'Bearer ' + auth.data.access_token,

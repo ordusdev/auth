@@ -3,15 +3,17 @@ import connection from '../connection'
 import { KeycloakConstants } from '../constants/keycloak.constant'
 import { UpdateUserType } from '../types/updateUser.type'
 import { AuthUsecase } from './admin/auth.usecase'
+import { UserRepresentationType } from '../types/representations/user.representaion.type'
 
 export class UpdateUserUsecase {
   async execute(data: UpdateUserType) {
     try {
       const auth = await new AuthUsecase().execute()
-      console.log('Update User KC ••• ')
+      // console.log('Update User KC ••• ')
+      const realm = data.realm ?? KeycloakConstants.REALM
 
-      const response = await connection.put(
-        '/admin/realms/' + KeycloakConstants.REALM + '/users' + data.id,
+      const response = await connection.put<UserRepresentationType>(
+        '/admin/realms/' + realm + '/users' + data.id,
         data,
         {
           headers: {
@@ -20,8 +22,8 @@ export class UpdateUserUsecase {
           },
         },
       )
-      console.log('UpdateUser KC response ••• ', response.data)
-      return response
+      // console.log('UpdateUser KC response ••• ', response.data)
+      return response.data
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.error(

@@ -10,7 +10,7 @@ async function run() {
     isTemporaryPassword: false,
   })
 
-  console.log(result)
+  // console.log(result)
 }
 
 run().catch(console.error)

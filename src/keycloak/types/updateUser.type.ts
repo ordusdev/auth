@@ -7,6 +7,7 @@ export class UpdateUserType {
   lastName?: string
   email?: string
   notBefore?: number
+  realm?: string
   access?: {
     manageGroupMembership?: boolean
     view?: boolean

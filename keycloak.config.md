@@ -119,6 +119,12 @@ Resposta:
 
 Troca um token de serviço por um token de usuário (impersonação controlada).
 
+> Atenção: é necessário configurar o serviço do keycloak para permitir troca de tokens, para isso você deve subir o container do keycloak com a variavel ambiente **`KC_FEATURES`**, bem como habilitar essa configuração no painel do keycloak
+
+```sh
+KC_FEATURES=token-exchange,token-exchange-standard
+```
+
 Endpoint:
 
 ```

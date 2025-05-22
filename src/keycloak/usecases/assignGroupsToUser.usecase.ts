@@ -3,17 +3,19 @@ import connection from '../connection'
 import { KeycloakConstants } from '../constants/keycloak.constant'
 import { AssignGroupsToUserType } from '../types/assignGroupsToUser.type'
 import { AuthUsecase } from './admin/auth.usecase'
+import { GroupRepresentationType } from '../types/representations/group.representation.type'
 
 export class AssignGroupsToUserUsecase {
   async execute(data: AssignGroupsToUserType) {
     try {
       const auth = await new AuthUsecase().execute()
-      console.log('Assign Groups To User KC ••• ')
+      // console.log('Assign Groups To User KC ••• ')
+      const realm = data.realm ?? KeycloakConstants.REALM
 
       const response = await Promise.all(
         data.groups.map(async group => {
-          const groupExists = await connection.get(
-            '/admin/realms/' + KeycloakConstants.REALM + '/groups/' + group,
+          const groupExists = await connection.get<GroupRepresentationType[]>(
+            '/admin/realms/' + realm + '/groups/' + group,
             {
               headers: {
                 Authorization: 'Bearer ' + auth.data.access_token,
@@ -26,12 +28,7 @@ export class AssignGroupsToUserUsecase {
             throw new Error(`Group #${group} does not exist`)
           }
           const response = await connection.put(
-            '/admin/realms/' +
-              KeycloakConstants.REALM +
-              '/users/' +
-              data.id +
-              '/groups/' +
-              group,
+            '/admin/realms/' + realm + '/users/' + data.id + '/groups/' + group,
             {},
             {
               headers: {
@@ -40,7 +37,7 @@ export class AssignGroupsToUserUsecase {
               },
             },
           )
-          console.log('AssignGroupsToUser KC response ••• ', response.data)
+          // console.log('AssignGroupsToUser KC response ••• ', response.data)
           return response.data
         }),
       )

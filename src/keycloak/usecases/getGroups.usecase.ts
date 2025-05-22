@@ -2,14 +2,14 @@ import axios from 'axios'
 import connection from '../connection'
 import { KeycloakConstants } from '../constants'
 import { AuthUsecase } from './admin/auth.usecase'
+import { GroupRepresentationType } from '../types/representations/group.representation.type'
 
 export class GetGroupsUsecase {
-  async execute() {
+  async execute(realm: string = KeycloakConstants.REALM) {
     try {
       const auth = await new AuthUsecase().execute()
-
-      const groups = await connection.get(
-        '/admin/realms/' + KeycloakConstants.REALM + '/groups',
+      const groups = await connection.get<GroupRepresentationType[]>(
+        '/admin/realms/' + realm + '/groups',
         {
           headers: {
             Authorization: 'Bearer ' + auth.data.access_token,
